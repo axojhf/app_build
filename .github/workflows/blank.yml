@@ -1,0 +1,25 @@
+name: CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  msvc-build:
+    runs-on: windows-2022
+    steps:
+      - name: Set Ninja
+        run: |
+          (new-object System.Net.WebClient).DownloadFile('https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-win.zip','ninja-win.zip')
+          7z x -aoa -oC:\ninja ninja-win.zip ; rm ninja-win.zip
+          cd C:\ ; git clone --depth=1 --recursive https://github.com/KikoPlayProject/KikoPlay
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+          toolset: 14.3
+      - name: Build
+        run: |
+          cd C:\vcpkg ; git pull ; ./bootstrap-vcpkg.bat
+          cd C:\KikoPlay
+          cmake -B build -S . "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release
+          ls
