@@ -1,39 +1,37 @@
-name: Demo Build
+name: zed Build
 
 on:
   push:
     branches:
       - main
 jobs:
-  demo-build:
-    name: Demo Build
+  zed-build:
+    name: zed Build
     runs-on: windows-2022
     steps:
-      - name: Set Mingw64 Ninja
-        run: |
-          (new-object System.Net.WebClient).DownloadFile('https://github.com/axojhf/cpp_library_build/releases/download/deps-toolchains/llvm-mingw1706_64.7z','mingw64.7z')
-          7z x -aoa -oC:\llvm-mingw1706_64 mingw64.7z ; rm mingw64.7z
-          (new-object System.Net.WebClient).DownloadFile('https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip','ninja-win.zip')
-          7z x -aoa -oC:\ninja ninja-win.zip ; rm ninja-win.zip
       - uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: amd64
           toolset: 14.3
-      # - uses: msys2/setup-msys2@v2
-      #   with:
-      #     msystem: mingw64
+      - name: Package Directories
+        run: |
+            rustup update
+            rustup target add wasm32-wasi
+            cd C:\ ; git clone --depth=1 https://github.com/zed-industries/zed -b v0.137.6
+            cd zed ; cargo build --release
+            ls ; ls target
       # - name: Package Directories
       #   run: |
-      #     cp -r C:\src C:\demo_install -Force
-      #     cp -r C:\src2 C:\demo_install -Force
-      #     7z a demo.7z C:\demo_install
+      #     cp -r C:\src C:\zed_install -Force
+      #     cp -r C:\src2 C:\zed_install -Force
+      #     7z a zed.7z C:\zed_install
       # - uses: actions/upload-artifact@v4
       #   with:
-      #     name: demo
-      #     path: demo.7z
-      # - name: Update demo Release
+      #     name: zed
+      #     path: zed.7z
+      # - name: Update zed Release
       #   uses: softprops/action-gh-release@v2
       #   with:
-      #     tag_name: demo-build
+      #     tag_name: zed-build
       #     files: |
-      #       demo.7z
+      #       zed.7z
