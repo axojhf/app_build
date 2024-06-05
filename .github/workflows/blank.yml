@@ -3,7 +3,7 @@ name: zed Build
 on:
   push:
     branches:
-      - main
+      - zed
 jobs:
   zed-build:
     name: zed Build
