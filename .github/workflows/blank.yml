@@ -19,6 +19,9 @@ jobs:
         with:
           arch: amd64
           toolset: 14.3
+      # - uses: msys2/setup-msys2@v2
+      #   with:
+      #     msystem: mingw64
       # - name: Package Directories
       #   run: |
       #     cp -r C:\src C:\demo_install -Force
