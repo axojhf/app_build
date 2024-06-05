@@ -22,6 +22,7 @@ jobs:
             ls target\release
       - name: Package Directories
         run: |
+          mkdir C:\zed_install
           cp C:\zed\target\release\*.exe C:\zed_install
           7z a zed-windows.7z C:\zed_install
       - uses: actions/upload-artifact@v4
