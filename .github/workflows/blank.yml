@@ -1,25 +1,36 @@
-name: CI
+name: Demo Build
+
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 jobs:
-  msvc-build:
+  demo-build:
+    name: Demo Build
     runs-on: windows-2022
     steps:
-      - name: Set Ninja
+      - name: Set Mingw64 Ninja
         run: |
-          (new-object System.Net.WebClient).DownloadFile('https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-win.zip','ninja-win.zip')
+          (new-object System.Net.WebClient).DownloadFile('https://github.com/axojhf/cpp_library_build/releases/download/deps-toolchains/llvm-mingw1706_64.7z','mingw64.7z')
+          7z x -aoa -oC:\llvm-mingw1706_64 mingw64.7z ; rm mingw64.7z
+          (new-object System.Net.WebClient).DownloadFile('https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip','ninja-win.zip')
           7z x -aoa -oC:\ninja ninja-win.zip ; rm ninja-win.zip
-          cd C:\ ; git clone --depth=1 --recursive https://github.com/KikoPlayProject/KikoPlay
       - uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: amd64
           toolset: 14.3
-      - name: Build
-        run: |
-          cd C:\vcpkg ; git pull ; ./bootstrap-vcpkg.bat
-          cd C:\KikoPlay
-          cmake -B build -S . "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release
-          ls
+      # - name: Package Directories
+      #   run: |
+      #     cp -r C:\src C:\demo_install -Force
+      #     cp -r C:\src2 C:\demo_install -Force
+      #     7z a demo.7z C:\demo_install
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: demo
+      #     path: demo.7z
+      # - name: Update demo Release
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     tag_name: demo-build
+      #     files: |
+      #       demo.7z
