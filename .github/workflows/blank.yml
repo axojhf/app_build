@@ -3,7 +3,7 @@ name: zls Build
 on:
   push:
     branches:
-      - main
+      - zls
 jobs:
   zls-build:
     name: zls Build
