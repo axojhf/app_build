@@ -1,39 +1,33 @@
-name: Demo Build
+name: zls Build
 
 on:
   push:
     branches:
       - main
 jobs:
-  demo-build:
-    name: Demo Build
+  zls-build:
+    name: zls Build
     runs-on: windows-2022
     steps:
-      - name: Set Mingw64 Ninja
+      - name: Build Pack Zls
         run: |
-          (new-object System.Net.WebClient).DownloadFile('https://github.com/axojhf/cpp_library_build/releases/download/deps-toolchains/llvm-mingw1706_64.7z','mingw64.7z')
-          7z x -aoa -oC:\llvm-mingw1706_64 mingw64.7z ; rm mingw64.7z
-          (new-object System.Net.WebClient).DownloadFile('https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip','ninja-win.zip')
-          7z x -aoa -oC:\ninja ninja-win.zip ; rm ninja-win.zip
-      - uses: ilammy/msvc-dev-cmd@v1
+          cd C:\ ; git clone --depth=1 https://github.com/zigtools/zls
+          cd zls ; zig build -Doptimize=ReleaseSafe
+          7z a C:\zls_master_ReleaseSafe.7z C:\zls\zig-out\bin\zls.exe
+          zig build -Doptimize=ReleaseFast
+          7z a C:\zls_master_ReleaseFast.7z C:\zls\zig-out\bin\zls.exe
+      - uses: actions/upload-artifact@v4
         with:
-          arch: amd64
-          toolset: 14.3
-      # - uses: msys2/setup-msys2@v2
-      #   with:
-      #     msystem: mingw64
-      # - name: Package Directories
-      #   run: |
-      #     cp -r C:\src C:\demo_install -Force
-      #     cp -r C:\src2 C:\demo_install -Force
-      #     7z a demo.7z C:\demo_install
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: demo
-      #     path: demo.7z
-      # - name: Update demo Release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     tag_name: demo-build
-      #     files: |
-      #       demo.7z
+          name: zls_master_ReleaseSafe
+          path: C:\zls_master_ReleaseSafe.7z
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zls_master_ReleaseFast
+          path: C:\zls_master_ReleaseFast.7z
+      - name: Update zls Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: zls-build
+          files: |
+            C:\zls_master_ReleaseSafe.7z
+            C:\zls_master_ReleaseFast.7z
