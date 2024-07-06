@@ -9,6 +9,9 @@ jobs:
     name: zls Build
     runs-on: windows-2022
     steps:
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: master
       - name: Build Pack Zls
         run: |
           cd C:\ ; git clone --depth=1 https://github.com/zigtools/zls
