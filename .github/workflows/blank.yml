@@ -16,19 +16,17 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: amd64
-      - name: Init
+      - name: Build
         run: |
           cd C:\ ; git clone --depth 1 https://github.com/xiaoyaocz/dart_simple_live
           cd dart_simple_live\simple_live_app
           flutter pub get
           flutter build windows --release
-          ls
-          ls build
-          ls build\windows
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: demo
-      #     path: demo.7z
+          7z a C:\dart_simple_live.7z C:\dart_simple_live\simple_live_app\build\windows\x64\runner\Release\*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dart_simple_live_windows_x64
+          path: C:\dart_simple_live.7z
       # - name: Update demo Release
       #   uses: softprops/action-gh-release@v2
       #   with:
