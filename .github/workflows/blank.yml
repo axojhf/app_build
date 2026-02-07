@@ -17,7 +17,7 @@ jobs:
         run: |
           cd C:\ ; git clone --depth 1 https://github.com/xiaoyaocz/dart_simple_live
           cd dart_simple_live\simple_live_app
-          dart pub get
+          flutter pub get
           flutter build windows --release
           ls
           ls build
