@@ -3,30 +3,25 @@ name: Demo Build
 on:
   push:
     branches:
-      - main
+      - dart
 jobs:
   demo-build:
     name: Demo Build
-    runs-on: windows-2022
+    runs-on: windows-latest
     steps:
-      - name: Set Mingw64 Ninja
-        run: |
-          (new-object System.Net.WebClient).DownloadFile('https://github.com/axojhf/cpp_library_build/releases/download/deps-toolchains/llvm-mingw1706_64.7z','mingw64.7z')
-          7z x -aoa -oC:\llvm-mingw1706_64 mingw64.7z ; rm mingw64.7z
-          (new-object System.Net.WebClient).DownloadFile('https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip','ninja-win.zip')
-          7z x -aoa -oC:\ninja ninja-win.zip ; rm ninja-win.zip
+      - uses: dart-lang/setup-dart@v1
       - uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: amd64
-          toolset: 14.3
-      # - uses: msys2/setup-msys2@v2
-      #   with:
-      #     msystem: mingw64
-      # - name: Package Directories
-      #   run: |
-      #     cp -r C:\src C:\demo_install -Force
-      #     cp -r C:\src2 C:\demo_install -Force
-      #     7z a demo.7z C:\demo_install
+      - name: Init
+        run: |
+          cd C:\ ; git clone --depth 1 https://github.com/xiaoyaocz/dart_simple_live
+          cd dart_simple_live\simple_live_app
+          dart pub get
+          flutter build windows --release
+          ls
+          ls build
+          ls build\windows
       # - uses: actions/upload-artifact@v4
       #   with:
       #     name: demo
