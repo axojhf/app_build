@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - codex
-env: 
+env:
   CODEX_RELEASE_TAG: "rust-v0.144.6"
 
 jobs:
@@ -153,7 +153,7 @@ jobs:
       - name: build and pack
         run: |
           cd codex/codex-rs ; cargo build --release --bin codex
-          7z a ~/codex_fix_a_macos_release.7z target\release\codex
+          7z a ~/codex_fix_a_macos_release.7z target/release/codex
       - name: Update codex custom win release build
         uses: softprops/action-gh-release@v3
         with:
