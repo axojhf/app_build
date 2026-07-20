@@ -91,6 +91,7 @@ jobs:
       - name: clone codex
         run: |
           git clone --depth=1 https://github.com/openai/codex -b ${{ env.CODEX_RELEASE_TAG }}
+          pwd
       - name: patch
         shell: bash
         run: |
@@ -151,11 +152,11 @@ jobs:
           PYTHON
       - name: build and pack
         run: |
-          cd codex-rs ; cargo build --release --bin codex
+          cd codex/codex-rs ; cargo build --release --bin codex
           7z a codex_fix_a_macos_release.7z target\release\codex.exe
       - name: Update codex custom win release build
         uses: softprops/action-gh-release@v3
         with:
           tag_name: codex-build
           files: |
-            C:\codex_fix_a_macos_release.7z
+            codex/codex-rs/codex_fix_a_macos_release.7z
