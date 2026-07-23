@@ -6,7 +6,7 @@ on:
     branches:
       - codex
 env:
-  CODEX_RELEASE_TAG: "rust-v0.144.6"
+  CODEX_RELEASE_TAG: "rust-v0.145.0"
 
 jobs:
 #   codex-a-build-win:
